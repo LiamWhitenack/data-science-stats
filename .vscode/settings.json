@@ -1,1 +1,33 @@
-{"python.defaultInterpreterPath": ".venv/bin/python"}
+{
+  // Auto-formatting including import sorting
+  "python.defaultInterpreterPath": ".venv/bin/python",
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.py$",
+        "cmd": ".venv/bin/python -m ruff check --select I --fix \"${file}\" && .venv/bin/python -m ruff format \"${file}\""
+      }
+    ]
+  },
+  "ty.completions.autoImport": false,
+  "ty.disableLanguageServices": true,
+  "ty.inlayHints.variableTypes": false,
+  "ty.inlayHints.callArgumentNames": false,
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingImports": "none",
+    "reportMissingModuleSource": "none",
+    "reportAttributeAccessIssue": "none",
+    "reportArgumentType": "none",
+    "reportCallIssue": "none",
+    "reportReturnType": "none",
+    "reportRedeclaration": "none",
+    "reportOperatorIssue": "none",
+  },
+  "python.testing.pytestArgs": [
+    "tests"
+  ],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+
+}
