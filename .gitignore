@@ -1,3 +1,99 @@
+# =========================
+# LaTeX intermediate files
+# =========================
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.nav
+*.snm
+*.lb
+*.bcf
+*.blg
+*.bbl
+*.run.xml
+*.synctex.gz
+*.synctex(busy)
+*.fdb_latexmk
+*.xdv
+*.vrb
+
+# =========================
+# Build directories
+# =========================
+/build/
+/out/
+/dist/
+
+# =========================
+# Latexmk
+# =========================
+*.fdb_latexmk
+*.fls
+
+# =========================
+# Bibliography
+# =========================
+*.bbl
+*.blg
+*.brf
+
+# =========================
+# Glossaries / Index
+# =========================
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
+*.idx
+*.ilg
+*.ind
+
+# =========================
+# TikZ / externalization
+# =========================
+*-figure*.pdf
+*.md5
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.bak
+*.backup
+*~
+*.swp
+*.swo
+
+# =========================
+# OS generated files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE / Editor settings
+# =========================
+.vscode/
+.idea/
+*.code-workspace
+
+# =========================
+# Output files (optional)
+# Uncomment if you do NOT want PDFs in repo
+# =========================
+# *.pdf
+
 # Python-generated files
 __pycache__/
 *.py[oc]
