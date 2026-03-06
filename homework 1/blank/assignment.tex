@@ -1,0 +1,160 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{array}
+
+\title{DASC 605 -- Homework 1}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+Please complete the following exercises either on your own or within a group of up to 4 students. Each group should submit only one, typed written submission. You can submit a word file, a pdf file or a markdown file that shows the code, results and interpretations for each exercise. Make sure that if you only submit a notebook type file, you annotate the results and interpretations as applicable. I will not give full credit for submissions that only have the code or the code plus results. Interpretations and/or answers with complete sentences that are context-aware for the exercise at hand are also required to receive full credit.
+
+\bigskip
+
+\textbf{Total Points for this Assignment: 100}
+
+\bigskip
+
+Assignment should be uploaded to CANVAS page no later than 5pm on March 15.
+
+\section*{Problem 1 [20 points]}
+
+We want to estimate the mean number of miles driven ($\mu_y$) to work by the heads of households for homeowners in a popular subdivision within the heart of VA Beach called Cluster Ridge. Because we believe that outliers may exist in the population due to overzealous commuters, our statistic of choice will be the 20\% trimmed sample mean, $tsm_{.20}$ (which is the mean of the middle 60\% of the data in your sample: order the sample from smallest to largest and then chop off the lower 20\% of the data as well as the upper 20\% of the data, then take the sample mean of what is left).
+
+To collect our data we will sample homes from two blocks within our subdivision, independently. Within the first block we will take a simple random sample of three of the four homes (labeled $H_1, H_2, H_3$ and $H_4$). From the second block we will independently sample two of the 6 homes (labeled $H_A, H_B, H_C, H_D, H_E, H_F$) according to the sampling design:
+
+\begin{center}
+\begin{tabular}{cc}
+\toprule
+Sample $S$ & $P(S)$ \\
+\midrule
+$\{H_A,H_C\}$ & $1/4$ \\
+$\{H_B,H_D\}$ & $7/16$ \\
+$\{H_A,H_E\}$ & $3/16$ \\
+$\{H_C,H_F\}$ & $1/8$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The table of values for travelling distances (commuter distance) is given below along with miles per gallon for the vehicle:
+
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+House & Travel Distance & MPG for Car Used \\
+\midrule
+$H_1$ & 35 & 25 \\
+$H_2$ & 50 & 20 \\
+$H_3$ & 20 & 10 \\
+$H_4$ & 8 & 26 \\
+$H_A$ & 5 & 15 \\
+$H_B$ & 15 & 20 \\
+$H_C$ & 22 & 10 \\
+$H_D$ & 58 & 30 \\
+$H_E$ & 35 & 24 \\
+$H_F$ & 50 & 27 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Here is a table for the 16 possible samples one could draw with this scheme:
+
+\begin{center}
+\begin{tabular}{lllll}
+\toprule
+Sample $S$ & $P(S)$ & Values & $tsm(.20)$ & Conf.\ Interval \\
+\midrule
+$\{H_1,H_2,H_3,H_A,H_C\}$ &  &  &  &  \\
+$\{H_1,H_2,H_3,H_B,H_D\}$ &  &  &  &  \\
+$\{H_1,H_2,H_3,H_A,H_E\}$ &  &  &  &  \\
+$\{H_1,H_2,H_3,H_C,H_F\}$ &  &  &  &  \\
+$\{H_1,H_2,H_4,H_A,H_C\}$ &  &  &  &  \\
+$\{H_1,H_2,H_4,H_B,H_D\}$ &  &  &  &  \\
+$\{H_1,H_2,H_4,H_A,H_E\}$ &  &  &  &  \\
+$\{H_1,H_2,H_4,H_C,H_F\}$ &  &  &  &  \\
+$\{H_4,H_2,H_3,H_A,H_C\}$ &  &  &  &  \\
+$\{H_4,H_2,H_3,H_B,H_D\}$ &  &  &  &  \\
+$\{H_4,H_2,H_3,H_A,H_E\}$ &  &  &  &  \\
+$\{H_4,H_2,H_3,H_C,H_F\}$ &  &  &  &  \\
+$\{H_1,H_3,H_4,H_A,H_C\}$ &  &  &  &  \\
+$\{H_1,H_3,H_4,H_B,H_D\}$ &  &  &  &  \\
+$\{H_1,H_3,H_4,H_A,H_E\}$ &  &  &  &  \\
+$\{H_1,H_3,H_4,H_C,H_F\}$ &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}
+\item[(a)] Is $tsm_{.20}$ unbiased for the population average commute distance? If not, what is the bias?
+\item[(b)] Is $tsm_{.20}$ unbiased for the 20\% trimmed population commute distance? If not, what is the bias?
+\item[(c)] What is the true sampling variance for $tsm_{.20}$ for estimating commuter distance under the proposed sampling design?
+\item[(d)] What is the confidence level for the confidence interval $tsm_{.20} \pm 6$ for estimating the true mean commuting distance?
+\item[(e)] Repeat (a) through (d) for average MPG. For part (d) what is the confidence level for the confidence interval $tsm_{.20} \pm 4$ for estimating the true mean MPG?
+\end{enumerate}
+
+\section*{Problem 2 [20 points]}
+
+For independent $Y_1 \sim Binomial(n_1,\pi_1)$ and $Y_2 \sim Binomial(n_2,\pi_2)$, the quantity $\hat{\pi}_1/\hat{\pi}_2$ is called the \textit{relative risk} or \textit{risk ratio}. This measure is often used in medical research to compare the probability of a certain outcome for two treatments.
+
+A randomized study with $n_1=n_2=50$ compares the probabilities of success $\pi_1$ for a new drug and $\pi_2$ for placebo. Suppose $\pi_1=0.20$ and $\pi_2=0.10$.
+
+\begin{enumerate}
+\item[(a)] Simulate 1,000,000 sample proportions from each treatment with $n_1=n_2=50$.
+
+Construct histograms for $\hat{\pi}_1/\hat{\pi}_2$ and $\log(\hat{\pi}_1/\hat{\pi}_2)$. Which seems to have sampling distribution closer to normality?
+
+\item[(b)] Simulate 1,000,000 sample proportions from each treatment with $n_1=n_2=1000$.
+
+Construct histograms for $\hat{\pi}_1/\hat{\pi}_2$ and $\log(\hat{\pi}_1/\hat{\pi}_2)$. Which seems to have sampling distribution closer to normality? Is this answer consistent with what you found for part (a)?
+
+\item[(c)] Repeat step (a) but assume that $n_1=30$ and $n_2=70$. What do the empirical sampling distributions suggest about the normality? Is this as clear as what you found for part (a)?
+
+\item[(d)] Repeat step (c) but now with sample sizes $n_1=70$ and $n_2=30$.
+\end{enumerate}
+
+\section*{Problem 3 [20 points]}
+
+For a point estimate of the mean of a population that is assumed to have a normal distribution, a data scientist decides to use the average of the sample lower and upper quartiles for the $n=100$ observations, since unlike the sample mean $\bar{Y}$, the quartiles are not affected by outliers.
+
+\begin{enumerate}
+\item[(a)] Evaluate the precision of this estimator compared to $\bar{Y}$ by randomly generating 100,000 samples of size 100 each from a $N(0,1)$ distribution and comparing the standard deviation of the 100,000 estimates with the theoretical standard error of $\bar{Y}$.
+
+\item[(b)] Assume now that the sample size is 500. Repeat step (a) using this updated sample size.
+\end{enumerate}
+
+\section*{Problem 4 [40 points]}
+
+\begin{enumerate}
+\item[(a) 15 points] In the 2018 General Social Survey, when asked whether they believed in life after death, 1017 of 1178 females said yes, and 703 of 945 males said yes.
+
+Construct 95\% confidence intervals for the population proportions of females and males that believe in life after death and for the difference between them. Interpret these intervals. Do the individual intervals overlap? Does the difference in proportions interval include zero?
+
+\item[(b) 25 points] Using any dataset from the repository:
+
+\texttt{https://stat4ds.rwth-aachen.de/data/}
+
+complete the following ``mini report'' that will include:
+
+\begin{enumerate}
+\item[(i)] Description of the problem you are trying to solve -- estimation goals for the project and background on why this is important. Assume 90\% confidence levels for all estimates.
+\item[(ii)] Description of the data you will use to solve the problem and discussion of key variables.
+\item[(iii)] Depiction of the sample data distribution for each variable you are considering. If the outcome is categorical, give a bar chart of the sample distribution.
+\item[(iv)] Estimation involving at least one mean and one proportion (with point and interval estimates) and their interpretation.
+\item[(v)] Estimation involving two groups compared on their averages or proportions.
+\item[(vi)] A 95\% confidence interval for the correlation between two continuous variables along with a corresponding scatterplot. Use bootstrapping with 1000 bootstrap samples.
+\item[(vii)] For one continuous outcome, compute a 95\% confidence interval of the Karl Pearson Skewness coefficient:
+\[
+3(\text{mean}-\text{median})/\text{standard deviation}
+\]
+based on 1000 bootstrap samples. Provide the interval and a visualization of the bootstrap distribution.
+\item[(viii)] A closing section highlighting what you learned from the data relative to your goals.
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}
