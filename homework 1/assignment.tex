@@ -1,0 +1,340 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{array}
+
+\title{DASC 605 -- Homework 1}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+Please complete the following exercises either on your own or within a group of up to 4 students. Each group should submit only one, typed written submission. You can submit a word file, a pdf file or a markdown file that shows the code, results and interpretations for each exercise. Make sure that if you only submit a notebook type file, you annotate the results and interpretations as applicable. I will not give full credit for submissions that only have the code or the code plus results. Interpretations and/or answers with complete sentences that are context-aware for the exercise at hand are also required to receive full credit.
+
+\bigskip
+
+\textbf{Total Points for this Assignment: 100}
+
+\bigskip
+
+Assignment should be uploaded to CANVAS page no later than 5pm on March 15.
+
+\section*{Problem 1 [20 points]}
+
+We want to estimate the mean number of miles driven ($\mu_y$) to work by the heads of households for homeowners in a popular subdivision within the heart of VA Beach called Cluster Ridge. Because we believe that outliers may exist in the population due to overzealous commuters, our statistic of choice will be the 20\% trimmed sample mean, tsm(.20) (which is the mean of the middle 60\% of the data in your sample: order the sample from smallest to largest and then chop off the lower 20\% of the data as well as the upper 20\% of the data, then take the sample mean of what is left).
+
+To collect our data we will sample homes from two blocks within our subdivision, independently. Within the first block we will take a simple random sample of three of the four homes (labeled $H_1, H_2, H_3$ and $H_4$). From the second block we will independently sample two of the 6 homes (labeled $H_A, H_B, H_C, H_D, H_E, H_F$) according to the sampling design:
+
+\begin{center}
+\begin{tabular}{cc}
+\toprule
+Sample $S$ & $P(S)$ \\
+\midrule
+$\{H_A,H_C\}$ & $1/4$ \\
+$\{H_B,H_D\}$ & $7/16$ \\
+$\{H_A,H_E\}$ & $3/16$ \\
+$\{H_C,H_F\}$ & $1/8$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The table of values for travelling distances (commuter distance) is given below along with miles per gallon for the vehicle:
+
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+House & Travel Distance & MPG for Car Used \\
+\midrule
+$H_1$ & 35 & 25 \\
+$H_2$ & 50 & 20 \\
+$H_3$ & 20 & 10 \\
+$H_4$ & 8 & 26 \\
+$H_A$ & 5 & 15 \\
+$H_B$ & 15 & 20 \\
+$H_C$ & 22 & 10 \\
+$H_D$ & 58 & 30 \\
+$H_E$ & 35 & 24 \\
+$H_F$ & 50 & 27 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Here is a table for the 16 possible samples one could draw with this scheme:
+
+\begin{center}
+\begin{tabular}{llllll}
+\toprule
+Sample $S$ & $P(S)$ & Values & $tsm(.20)$ Dist. & $tsm(.20)$ MPG & Conf.\ Interval \\
+\midrule
+$\{H_1,H_2,H_3,H_A,H_C\}$ & $1/16$ & $(35,50,20,5,22)$ & $25\;2/3$ & $15$ & $(19\;2/3,31\;2/3)$ \\
+$\{H_1,H_2,H_3,H_B,H_D\}$ & $7/64$ & $(35,50,20,15,58)$ & $35$ & $21\;2/3$ & $(29,41)$ \\
+$\{H_1,H_2,H_3,H_A,H_E\}$ & $3/64$ & $(35,50,20,5,35)$ & $30$ & $19\;2/3$ & $(24,36)$ \\
+$\{H_1,H_2,H_3,H_C,H_F\}$ & $1/32$ & $(35,50,20,22,50)$ & $35\;2/3$ & $18\;1/3$ & $(29\;2/3,41\;2/3)$ \\
+
+$\{H_1,H_2,H_4,H_A,H_C\}$ & $1/16$ & $(35,50,8,5,22)$ & $21\;2/3$ & $20$ & $(15\;2/3,27\;2/3)$ \\
+$\{H_1,H_2,H_4,H_B,H_D\}$ & $7/64$ & $(35,50,8,15,58)$ & $33\;1/3$ & $23\;2/3$ & $(27\;1/3,39\;1/3)$ \\
+$\{H_1,H_2,H_4,H_A,H_E\}$ & $3/64$ & $(35,50,8,5,35)$ & $26$ & $23$ & $(20,32)$ \\
+$\{H_1,H_2,H_4,H_C,H_F\}$ & $1/32$ & $(35,50,8,22,50)$ & $35\;2/3$ & $23\;2/3$ & $(29\;2/3,41\;2/3)$ \\
+
+$\{H_1,H_3,H_4,H_A,H_C\}$ & $1/16$ & $(35,20,8,5,22)$ & $16\;2/3$ & $16\;2/3$ & $(10\;2/3,22\;2/3)$ \\
+$\{H_1,H_3,H_4,H_B,H_D\}$ & $7/64$ & $(35,20,8,15,58)$ & $23\;1/3$ & $23\;2/3$ & $(17\;1/3,29\;1/3)$ \\
+$\{H_1,H_3,H_4,H_A,H_E\}$ & $3/64$ & $(35,20,8,5,35)$ & $21$ & $21\;1/3$ & $(15,27)$ \\
+$\{H_1,H_3,H_4,H_C,H_F\}$ & $1/32$ & $(35,20,8,22,50)$ & $25\;2/3$ & $20\;1/3$ & $(19\;2/3,31\;2/3)$ \\
+
+$\{H_2,H_3,H_4,H_A,H_C\}$ & $1/16$ & $(50,20,8,5,22)$ & $16\;2/3$ & $15$ & $(10\;2/3,22\;2/3)$ \\
+$\{H_2,H_3,H_4,H_B,H_D\}$ & $7/64$ & $(50,20,8,15,58)$ & $28\;1/3$ & $22$ & $(22\;1/3,34\;1/3)$ \\
+$\{H_2,H_3,H_4,H_A,H_E\}$ & $3/64$ & $(50,20,8,5,35)$ & $21$ & $19\;2/3$ & $(15,27)$ \\
+$\{H_2,H_3,H_4,H_C,H_F\}$ & $1/32$ & $(50,20,8,22,50)$ & $30\;2/3$ & $18\;2/3$ & $(24\;2/3,36\;2/3)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}
+\item[(a)] Is tsm(.20) unbiased for the population average commute distance? If not, what is the bias?
+
+\begin{verbatim}
+expected_tsm_distance = (table["tsm(.20) Distance"] * table["P(S)"]).sum()
+true_average = mean(list(travel_distance.values()))
+
+bias_distance_mean = expected_tsm_distance - true_average
+\end{verbatim}
+
+\[
+\text{Bias}(tsm_{.20}) = E(tsm_{.20}) - \mu
+\]
+
+\[
+= 26.645833333333332 - 29.8
+\]
+
+\[
+= -3.154166666666668
+\]
+
+Thus, the estimator tsm(.20) is biased and underestimates the true population mean commute distance by approximately $3.154$ miles on average.
+
+\item[(b)] Is tsm(.20) unbiased for the 20\% trimmed population commute distance? If not, what is the bias?
+
+\begin{verbatim}
+true_tsm_20_average = mean(sorted(travel_distance.values())[2:8])
+
+bias_distance_trimmed = expected_tsm_distance - true_tsm_20_average
+\end{verbatim}
+
+\[
+\text{Bias}(tsm_{.20}) = E(tsm_{.20}) - \mu
+\]
+
+\[
+= 26.645833333333332 - 29.5
+\]
+
+\[
+= -2.854166666666668
+\]
+
+Thus, the estimator tsm(.20) is biased and underestimates the true population mean commute distance by approximately $2.854$ miles on average.
+
+\item[(c)] What is the true sampling variance for tsm(.20) for estimating commuter distance under the proposed sampling design?
+
+\begin{verbatim}
+variance_distance = (
+    table["P(S)"]
+    * (table["tsm(.20) Distance"] - expected_tsm_distance) ** 2
+).sum()
+\end{verbatim}
+
+\[
+\text{Var}(tsm_{.20}) = 36.650173611111114
+\]
+
+\item[(d)] What is the confidence level for the confidence interval $tsm_{.20} \pm 6$ for estimating the true mean commuting distance?
+
+\begin{verbatim}
+coverage = table.apply(
+    lambda row: row["P(S)"]
+    if (true_average >= row["tsm(.20) Distance"] - 6)
+    and (true_average <= row["tsm(.20) Distance"] + 6)
+    else 0,
+    axis=1,
+).sum()
+\end{verbatim}
+
+\[
+\text{Confidence Level} = \frac{21}{32} \approx 0.65625
+\]
+
+Thus, the confidence interval $tsm_{.20} \pm 6$ captures the true mean commuting distance with probability $\frac{21}{32}$.
+
+\item[(e)] Repeat (a) through (d) for average MPG. For part (d) what is the confidence level for the confidence interval $tsm_{.20} \pm 4$ for estimating the true mean MPG?
+
+\begin{verbatim}
+true_mpg_mean = mean(list(mpg_for_car_used.values()))
+true_mpg_trimmed = mean(sorted(mpg_for_car_used.values())[2:8])
+
+expected_tsm_mpg = (table["tsm(.20) MPG"] * table["P(S)"]).sum()
+
+bias_mpg_mean = expected_tsm_mpg - true_mpg_mean
+bias_mpg_trimmed = expected_tsm_mpg - true_mpg_trimmed
+\end{verbatim}
+
+\[
+E(tsm_{.20}^{MPG}) = 20.765625
+\]
+
+\[
+\text{Population Mean MPG} = 20.7
+\]
+
+\[
+\text{Bias (Population Mean)} = 0.065625
+\]
+
+\[
+\text{20\% Trimmed Population Mean MPG} = 20.5
+\]
+
+\[
+\text{Bias (Trimmed Mean)} = 0.265625
+\]
+
+\begin{verbatim}
+variance_mpg = (
+    table["P(S)"]
+    * (table["tsm(.20) MPG"] - expected_tsm_mpg) ** 2
+).sum()
+\end{verbatim}
+
+\[
+\text{Var}(tsm_{.20}^{MPG}) = 7.458740234375
+\]
+
+\begin{verbatim}
+coverage_mpg = table.apply(
+    lambda row: row["P(S)"]
+    if (true_mpg_mean >= row["tsm(.20) MPG"] - 4)
+    and (true_mpg_mean <= row["tsm(.20) MPG"] + 4)
+    else 0,
+    axis=1,
+).sum()
+\end{verbatim}
+
+\[
+\text{Confidence Level} = \frac{59}{64} \approx 0.921875
+\]
+
+Thus, the interval $tsm_{.20} \pm 4$ captures the true mean MPG with probability $\frac{59}{64}$.
+
+\end{enumerate}
+
+\section*{Problem 2 [20 points]}
+
+For independent $Y_1 \sim Binomial(n_1,\pi_1)$ and $Y_2 \sim Binomial(n_2,\pi_2)$, the quantity $\hat{\pi}_1/\hat{\pi}_2$ is called the \textit{relative risk} or \textit{risk ratio}. This measure is often used in medical research to compare the probability of a certain outcome for two treatments.
+
+A randomized study with $n_1=n_2=50$ compares the probabilities of success $\pi_1$ for a new drug and $\pi_2$ for placebo. Suppose $\pi_1=0.20$ and $\pi_2=0.10$.
+
+\begin{verbatim}
+from numpy import log
+from numpy.random import binomial
+
+def get_risk_ratio(n1: int, n2: int) -> None:
+    y1 = binomial(n1, 0.20, 1_000_000)
+    y2 = binomial(n2, 0.10, 1_000_000)
+
+    pi1_hat = y1 / 50
+    pi2_hat = y2 / 50
+
+    print(f"risk_ratio = {pi1_hat / pi2_hat}")
+    print(f"log_risk_ratio = {log(pi1_hat / pi2_hat)}")
+\end{verbatim}
+
+\begin{enumerate}
+    
+\item[(a)] Simulate 1,000,000 sample proportions from each treatment with $n_1=n_2=50$.
+
+\begin{verbatim}
+get_risk_ratio(50, 50)
+\end{verbatim}
+
+Construct histograms for $\hat{\pi}_1/\hat{\pi}_2$ and $\log(\hat{\pi}_1/\hat{\pi}_2)$. Which seems to have sampling distribution closer to normality?
+
+\item[(b)] Simulate 1,000,000 sample proportions with $n_1=n_2=1000$.
+
+\begin{verbatim}
+y1 = binomial(1000, 0.20, 1_000_000)
+y2 = binomial(1000, 0.10, 1_000_000)
+\end{verbatim}
+
+Construct histograms for $\hat{\pi}_1/\hat{\pi}_2$ and $\log(\hat{\pi}_1/\hat{\pi}_2)$. Which seems to have sampling distribution closer to normality? Is this answer consistent with what you found for part (a)?
+
+
+\item[(c)] Simulate 1,000,000 sample proportions from each treatment with $n_1=30$ and $n_2=70$. What do the empirical sampling distributions suggest about the normality? Is this as clear as what you found for part (a)?
+
+\begin{verbatim}
+y1 = binomial(30, 0.20, 1_000_000)
+y2 = binomial(70, 0.10, 1_000_000)
+\end{verbatim}
+
+The empirical sampling distribution of $\hat{\pi}_1/\hat{\pi}_2$ remains skewed.  
+The log relative risk again appears closer to normality.
+
+However, because the sample sizes are smaller and unequal, the deviation from normality is more noticeable than in part (a).
+
+\item[(d)] Simulate 1,000,000 sample proportions from each treatment with $n_1=70$ and $n_2=30$. What do the empirical sampling distributions suggest about the normality?.
+
+\begin{verbatim}
+y1 = binomial(70, 0.20, 1_000_000)
+y2 = binomial(30, 0.10, 1_000_000)
+\end{verbatim}
+
+The same general pattern is observed.  
+The relative risk remains skewed, while the log relative risk appears more symmetric and closer to a normal distribution.
+
+Thus, across all scenarios considered, the logarithm of the relative risk provides a sampling distribution that is closer to normal.
+
+\end{enumerate}
+
+\section*{Problem 3 [20 points]}
+
+For a point estimate of the mean of a population that is assumed to have a normal distribution, a data scientist decides to use the average of the sample lower and upper quartiles for the $n=100$ observations, since unlike the sample mean $\bar{Y}$, the quartiles are not affected by outliers.
+
+\begin{enumerate}
+\item[(a)] Evaluate the precision of this estimator compared to $\bar{Y}$ by randomly generating 100,000 samples of size 100 each from a $N(0,1)$ distribution and comparing the standard deviation of the 100,000 estimates with the theoretical standard error of $\bar{Y}$.
+
+\item[(b)] Assume now that the sample size is 500. Repeat step (a) using this updated sample size.
+\end{enumerate}
+
+\section*{Problem 4 [40 points]}
+
+\begin{enumerate}
+\item[(a) 15 points] In the 2018 General Social Survey, when asked whether they believed in life after death, 1017 of 1178 females said yes, and 703 of 945 males said yes.
+
+Construct 95\% confidence intervals for the population proportions of females and males that believe in life after death and for the difference between them. Interpret these intervals. Do the individual intervals overlap? Does the difference in proportions interval include zero?
+
+\item[(b) 25 points] Using any dataset from the repository:
+
+\texttt{https://stat4ds.rwth-aachen.de/data/}
+
+complete the following ``mini report'' that will include:
+
+\begin{enumerate}
+\item[(i)] Description of the problem you are trying to solve -- estimation goals for the project and background on why this is important. Assume 90\% confidence levels for all estimates.
+\item[(ii)] Description of the data you will use to solve the problem and discussion of key variables.
+\item[(iii)] Depiction of the sample data distribution for each variable you are considering. If the outcome is categorical, give a bar chart of the sample distribution.
+\item[(iv)] Estimation involving at least one mean and one proportion (with point and interval estimates) and their interpretation.
+\item[(v)] Estimation involving two groups compared on their averages or proportions.
+\item[(vi)] A 95\% confidence interval for the correlation between two continuous variables along with a corresponding scatterplot. Use bootstrapping with 1000 bootstrap samples.
+\item[(vii)] For one continuous outcome, compute a 95\% confidence interval of the Karl Pearson Skewness coefficient:
+\[
+3(\text{mean}-\text{median})/\text{standard deviation}
+\]
+based on 1000 bootstrap samples. Provide the interval and a visualization of the bootstrap distribution.
+\item[(viii)] A closing section highlighting what you learned from the data relative to your goals.
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}
