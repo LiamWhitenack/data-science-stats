@@ -5,10 +5,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "black>=26.3.0",
     "matplotlib>=3.10.8",
     "numpy>=2.4.2",
     "pandas>=3.0.0",
     "pandas-stubs>=3.0.0.260204",
+    "ruff>=0.15.5",
     "seaborn>=0.13.2",
     "ty>=0.0.15",
 ]

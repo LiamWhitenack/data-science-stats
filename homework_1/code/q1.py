@@ -2,7 +2,6 @@ from numpy import mean
 from itertools import combinations
 from pandas import DataFrame
 
-
 travel_distance = {
     "H1": 35,
     "H2": 50,
@@ -84,7 +83,6 @@ for first_sample in first_block_samples:
 table = DataFrame(rows)
 
 
-
 # Is tsm.20 unbiased for the population average commute distance? If not, what is the
 # bias?
 expected_tsm_distance = (table["tsm(.20) Distance"] * table["P(S)"]).sum()
@@ -100,17 +98,18 @@ bias_distance_trimmed = expected_tsm_distance - true_tsm_20_average
 # What is the true sampling variance for tsm.20 for estimating commuter distance under
 # the proposed sampling design?
 variance_distance = (
-    table["P(S)"]
-    * (table["tsm(.20) Distance"] - expected_tsm_distance) ** 2
+    table["P(S)"] * (table["tsm(.20) Distance"] - expected_tsm_distance) ** 2
 ).sum()
 
 # What is the confidence level for the confidence interval tsm.20 ± 6 for estimating the
 # true mean commuting distance?
 coverage = table.apply(
-    lambda row: row["P(S)"]
-    if (true_average >= row["tsm(.20) Distance"] - 6)
-    and (true_average <= row["tsm(.20) Distance"] + 6)
-    else 0,
+    lambda row: (
+        row["P(S)"]
+        if (true_average >= row["tsm(.20) Distance"] - 6)
+        and (true_average <= row["tsm(.20) Distance"] + 6)
+        else 0
+    ),
     axis=1,
 ).sum()
 
@@ -126,16 +125,15 @@ bias_mpg_mean = expected_tsm_mpg - true_mpg_mean
 
 bias_mpg_trimmed = expected_tsm_mpg - true_mpg_trimmed
 
-variance_mpg = (
-    table["P(S)"]
-    * (table["tsm(.20) MPG"] - expected_tsm_mpg) ** 2
-).sum()
+variance_mpg = (table["P(S)"] * (table["tsm(.20) MPG"] - expected_tsm_mpg) ** 2).sum()
 
 coverage_mpg = table.apply(
-    lambda row: row["P(S)"]
-    if (true_mpg_mean >= row["tsm(.20) MPG"] - 4)
-    and (true_mpg_mean <= row["tsm(.20) MPG"] + 4)
-    else 0,
+    lambda row: (
+        row["P(S)"]
+        if (true_mpg_mean >= row["tsm(.20) MPG"] - 4)
+        and (true_mpg_mean <= row["tsm(.20) MPG"] + 4)
+        else 0
+    ),
     axis=1,
 ).sum()
 

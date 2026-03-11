@@ -4,6 +4,23 @@
 \usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor} 
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{orange},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1
+}
 
 \title{DASC 605 -- Homework 1}
 \date{}
@@ -95,12 +112,12 @@ $\{H_2,H_3,H_4,H_C,H_F\}$ & $1/32$ & $(50,20,8,22,50)$ & $30\;2/3$ & $18\;2/3$ &
 \begin{enumerate}
 \item[(a)] Is tsm(.20) unbiased for the population average commute distance? If not, what is the bias?
 
-\begin{verbatim}
+\begin{lstlisting}
 expected_tsm_distance = (table["tsm(.20) Distance"] * table["P(S)"]).sum()
 true_average = mean(list(travel_distance.values()))
 
 bias_distance_mean = expected_tsm_distance - true_average
-\end{verbatim}
+\end{lstlisting}
 
 \[
 \text{Bias}(tsm_{.20}) = E(tsm_{.20}) - \mu
@@ -118,11 +135,11 @@ Thus, the estimator tsm(.20) is biased and underestimates the true population me
 
 \item[(b)] Is tsm(.20) unbiased for the 20\% trimmed population commute distance? If not, what is the bias?
 
-\begin{verbatim}
+\begin{lstlisting}
 true_tsm_20_average = mean(sorted(travel_distance.values())[2:8])
 
 bias_distance_trimmed = expected_tsm_distance - true_tsm_20_average
-\end{verbatim}
+\end{lstlisting}
 
 \[
 \text{Bias}(tsm_{.20}) = E(tsm_{.20}) - \mu
@@ -140,12 +157,12 @@ Thus, the estimator tsm(.20) is biased and underestimates the true population me
 
 \item[(c)] What is the true sampling variance for tsm(.20) for estimating commuter distance under the proposed sampling design?
 
-\begin{verbatim}
+\begin{lstlisting}
 variance_distance = (
     table["P(S)"]
     * (table["tsm(.20) Distance"] - expected_tsm_distance) ** 2
 ).sum()
-\end{verbatim}
+\end{lstlisting}
 
 \[
 \text{Var}(tsm_{.20}) = 36.650173611111114
@@ -153,7 +170,7 @@ variance_distance = (
 
 \item[(d)] What is the confidence level for the confidence interval $tsm_{.20} \pm 6$ for estimating the true mean commuting distance?
 
-\begin{verbatim}
+\begin{lstlisting}
 coverage = table.apply(
     lambda row: row["P(S)"]
     if (true_average >= row["tsm(.20) Distance"] - 6)
@@ -161,7 +178,7 @@ coverage = table.apply(
     else 0,
     axis=1,
 ).sum()
-\end{verbatim}
+\end{lstlisting}
 
 \[
 \text{Confidence Level} = \frac{21}{32} \approx 0.65625
@@ -171,7 +188,7 @@ Thus, the confidence interval $tsm_{.20} \pm 6$ captures the true mean commuting
 
 \item[(e)] Repeat (a) through (d) for average MPG. For part (d) what is the confidence level for the confidence interval $tsm_{.20} \pm 4$ for estimating the true mean MPG?
 
-\begin{verbatim}
+\begin{lstlisting}
 true_mpg_mean = mean(list(mpg_for_car_used.values()))
 true_mpg_trimmed = mean(sorted(mpg_for_car_used.values())[2:8])
 
@@ -179,7 +196,7 @@ expected_tsm_mpg = (table["tsm(.20) MPG"] * table["P(S)"]).sum()
 
 bias_mpg_mean = expected_tsm_mpg - true_mpg_mean
 bias_mpg_trimmed = expected_tsm_mpg - true_mpg_trimmed
-\end{verbatim}
+\end{lstlisting}
 
 \[
 E(tsm_{.20}^{MPG}) = 20.765625
@@ -201,18 +218,18 @@ E(tsm_{.20}^{MPG}) = 20.765625
 \text{Bias (Trimmed Mean)} = 0.265625
 \]
 
-\begin{verbatim}
+\begin{lstlisting}
 variance_mpg = (
     table["P(S)"]
     * (table["tsm(.20) MPG"] - expected_tsm_mpg) ** 2
 ).sum()
-\end{verbatim}
+\end{lstlisting}
 
 \[
 \text{Var}(tsm_{.20}^{MPG}) = 7.458740234375
 \]
 
-\begin{verbatim}
+\begin{lstlisting}
 coverage_mpg = table.apply(
     lambda row: row["P(S)"]
     if (true_mpg_mean >= row["tsm(.20) MPG"] - 4)
@@ -220,7 +237,7 @@ coverage_mpg = table.apply(
     else 0,
     axis=1,
 ).sum()
-\end{verbatim}
+\end{lstlisting}
 
 \[
 \text{Confidence Level} = \frac{59}{64} \approx 0.921875
@@ -236,65 +253,82 @@ For independent $Y_1 \sim Binomial(n_1,\pi_1)$ and $Y_2 \sim Binomial(n_2,\pi_2)
 
 A randomized study with $n_1=n_2=50$ compares the probabilities of success $\pi_1$ for a new drug and $\pi_2$ for placebo. Suppose $\pi_1=0.20$ and $\pi_2=0.10$.
 
-\begin{verbatim}
-from numpy import log
+\vspace{1cm}
+\textit{Python code below was used to simulate sample proportions and generate histograms.}
+\begin{lstlisting}
+import matplotlib.pyplot as plt
+import numpy as np
+from numpy import errstate, isfinite, log, ndarray
 from numpy.random import binomial
 
-def get_risk_ratio(n1: int, n2: int) -> None:
+
+def get_risk_ratio(n1: int, n2: int) -> tuple[ndarray, ndarray]:
     y1 = binomial(n1, 0.20, 1_000_000)
     y2 = binomial(n2, 0.10, 1_000_000)
 
     pi1_hat = y1 / 50
     pi2_hat = y2 / 50
 
-    print(f"risk_ratio = {pi1_hat / pi2_hat}")
-    print(f"log_risk_ratio = {log(pi1_hat / pi2_hat)}")
-\end{verbatim}
+    with errstate(divide="ignore", invalid="ignore"):
+        risk_ratio = pi1_hat / pi2_hat
+        log_risk_ratio = log(risk_ratio)
+
+    # keep only valid values
+    risk_ratio = risk_ratio[isfinite(risk_ratio)]
+    log_risk_ratio = log_risk_ratio[isfinite(log_risk_ratio)]
+
+    return risk_ratio, log_risk_ratio
+
+
+def histogram(n1: int, n2: int, fname: str) -> None:
+    risk_ratio, log_risk_ratio = get_risk_ratio(n1, n2)
+
+    combined = np.concatenate([risk_ratio, log_risk_ratio])
+    bins = np.linspace(combined.min(), combined.max(), 101)
+
+    plt.hist(risk_ratio, bins=bins, alpha=0.5, label="Risk Ratio")
+    plt.hist(log_risk_ratio, bins=bins, alpha=0.5, label="Log Risk Ratio")
+
+    plt.title(fname)
+
+    plt.legend()
+
+    plt.savefig(f"homework_1/plots/{fname.replace(' ', '_')}.png")
+    plt.close()
+\end{lstlisting}
 
 \begin{enumerate}
-    
-\item[(a)] Simulate 1,000,000 sample proportions from each treatment with $n_1=n_2=50$.
+\item[(a)] Simulate 1,000,000 sample proportions from each treatment with $n_1=n_2=50$. Construct histograms for $\hat{\pi}_1/\hat{\pi}_2$ and $\log(\hat{\pi}_1/\hat{\pi}_2)$. Which seems to have sampling distribution closer to normality?  
 
-\begin{verbatim}
-get_risk_ratio(50, 50)
-\end{verbatim}
+The risk ratio is strongly right-skewed; the log risk ratio is approximately symmetric and closer to normal.  
 
-Construct histograms for $\hat{\pi}_1/\hat{\pi}_2$ and $\log(\hat{\pi}_1/\hat{\pi}_2)$. Which seems to have sampling distribution closer to normality?
+\begin{center}
+\includegraphics[width=0.7\textwidth]{plots/Q2_a_Histogram.png}
+\end{center}
 
-\item[(b)] Simulate 1,000,000 sample proportions with $n_1=n_2=1000$.
+\item[(b)] Simulate 1,000,000 sample proportions from each treatment with $n_1=n_2=1000$. Construct histograms for $\hat{\pi}_1/\hat{\pi}_2$ and $\log(\hat{\pi}_1/\hat{\pi}_2)$. Which seems to have sampling distribution closer to normality? Is this answer consistent with part (a)?  
 
-\begin{verbatim}
-y1 = binomial(1000, 0.20, 1_000_000)
-y2 = binomial(1000, 0.10, 1_000_000)
-\end{verbatim}
+Larger samples make both distributions more normal; the log risk ratio remains closer to normal. This is consistent with part (a).  
 
-Construct histograms for $\hat{\pi}_1/\hat{\pi}_2$ and $\log(\hat{\pi}_1/\hat{\pi}_2)$. Which seems to have sampling distribution closer to normality? Is this answer consistent with what you found for part (a)?
+\begin{center}
+\includegraphics[width=0.7\textwidth]{plots/Q2_b_Histogram.png}
+\end{center}
 
+\item[(c)] Repeat step (a) but assume $n_1=30$ and $n_2=70$. What do the empirical sampling distributions suggest about normality? Is this as clear as part (a)?  
 
-\item[(c)] Simulate 1,000,000 sample proportions from each treatment with $n_1=30$ and $n_2=70$. What do the empirical sampling distributions suggest about the normality? Is this as clear as what you found for part (a)?
+Unequal samples increase skew; the log risk ratio is still more symmetric but less clearly normal.  
 
-\begin{verbatim}
-y1 = binomial(30, 0.20, 1_000_000)
-y2 = binomial(70, 0.10, 1_000_000)
-\end{verbatim}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{plots/Q2_c_Histogram.png}
+\end{center}
 
-The empirical sampling distribution of $\hat{\pi}_1/\hat{\pi}_2$ remains skewed.  
-The log relative risk again appears closer to normality.
+\item[(d)] Repeat step (c) but now with sample sizes $n_1=70$ and $n_2=30$.  
 
-However, because the sample sizes are smaller and unequal, the deviation from normality is more noticeable than in part (a).
+Small denominator sample exaggerates skew in the risk ratio; the log risk ratio remains closer to normal, though slight skewness remains.  
 
-\item[(d)] Simulate 1,000,000 sample proportions from each treatment with $n_1=70$ and $n_2=30$. What do the empirical sampling distributions suggest about the normality?.
-
-\begin{verbatim}
-y1 = binomial(70, 0.20, 1_000_000)
-y2 = binomial(30, 0.10, 1_000_000)
-\end{verbatim}
-
-The same general pattern is observed.  
-The relative risk remains skewed, while the log relative risk appears more symmetric and closer to a normal distribution.
-
-Thus, across all scenarios considered, the logarithm of the relative risk provides a sampling distribution that is closer to normal.
-
+\begin{center}
+\includegraphics[width=0.7\textwidth]{plots/Q2_d_Histogram.png}
+\end{center}
 \end{enumerate}
 
 \section*{Problem 3 [20 points]}
