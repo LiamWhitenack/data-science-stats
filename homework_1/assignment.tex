@@ -131,8 +131,7 @@ bias_distance_mean = expected_tsm_distance - true_average
 = -3.154166666666668
 \]
 
-Thus, the estimator tsm(.20) is biased and underestimates the true population mean commute distance by approximately $3.154$ miles on average.
-
+\textit{\textcolor{blue}{Thus, the estimator tsm(.20) is biased and underestimates the true population mean commute distance by approximately $3.154$ miles on average.}}
 \item[(b)] Is tsm(.20) unbiased for the 20\% trimmed population commute distance? If not, what is the bias?
 
 \begin{lstlisting}
@@ -153,7 +152,7 @@ bias_distance_trimmed = expected_tsm_distance - true_tsm_20_average
 = -2.854166666666668
 \]
 
-Thus, the estimator tsm(.20) is biased and underestimates the true population mean commute distance by approximately $2.854$ miles on average.
+\textit{\textcolor{blue}{Thus, the estimator tsm(.20) is biased and underestimates the true population mean commute distance by approximately $2.854$ miles on average.}}
 
 \item[(c)] What is the true sampling variance for tsm(.20) for estimating commuter distance under the proposed sampling design?
 
@@ -184,7 +183,7 @@ coverage = table.apply(
 \text{Confidence Level} = \frac{21}{32} \approx 0.65625
 \]
 
-Thus, the confidence interval $tsm_{.20} \pm 6$ captures the true mean commuting distance with probability $\frac{21}{32}$.
+\textit{\textcolor{blue}{Thus, the confidence interval $tsm_{.20} \pm 6$ captures the true mean commuting distance with probability $\frac{21}{32}$.}}
 
 \item[(e)] Repeat (a) through (d) for average MPG. For part (d) what is the confidence level for the confidence interval $tsm_{.20} \pm 4$ for estimating the true mean MPG?
 
@@ -243,7 +242,7 @@ coverage_mpg = table.apply(
 \text{Confidence Level} = \frac{59}{64} \approx 0.921875
 \]
 
-Thus, the interval $tsm_{.20} \pm 4$ captures the true mean MPG with probability $\frac{59}{64}$.
+\textit{\textcolor{blue}{Thus, the interval $tsm_{.20} \pm 4$ captures the true mean MPG with probability $\frac{59}{64}$.}}
 
 \end{enumerate}
 
@@ -293,14 +292,14 @@ def histogram(n1: int, n2: int, fname: str) -> None:
 
     plt.legend()
 
-    plt.savefig(f"homework_1/plots/{fname.replace(' ', '_')}.png")
+    plt.savefig(f"plots/{fname.replace(' ', '_')}.png")
     plt.close()
 \end{lstlisting}
 
 \begin{enumerate}
 \item[(a)] Simulate 1,000,000 sample proportions from each treatment with $n_1=n_2=50$. Construct histograms for $\hat{\pi}_1/\hat{\pi}_2$ and $\log(\hat{\pi}_1/\hat{\pi}_2)$. Which seems to have sampling distribution closer to normality?  
 
-The risk ratio is strongly right-skewed; the log risk ratio is approximately symmetric and closer to normal.  
+\textit{\textcolor{blue}{The risk ratio is strongly right-skewed; the log risk ratio is approximately symmetric and closer to normal.  }}
 
 \begin{center}
 \includegraphics[width=0.7\textwidth]{plots/Q2_a_Histogram.png}
@@ -308,7 +307,7 @@ The risk ratio is strongly right-skewed; the log risk ratio is approximately sym
 
 \item[(b)] Simulate 1,000,000 sample proportions from each treatment with $n_1=n_2=1000$. Construct histograms for $\hat{\pi}_1/\hat{\pi}_2$ and $\log(\hat{\pi}_1/\hat{\pi}_2)$. Which seems to have sampling distribution closer to normality? Is this answer consistent with part (a)?  
 
-Larger samples make both distributions more normal; the log risk ratio remains closer to normal. This is consistent with part (a).  
+\textit{\textcolor{blue}{Larger samples make both distributions more normal; the log risk ratio remains closer to normal. This is consistent with part (a).  }}
 
 \begin{center}
 \includegraphics[width=0.7\textwidth]{plots/Q2_b_Histogram.png}
@@ -316,7 +315,7 @@ Larger samples make both distributions more normal; the log risk ratio remains c
 
 \item[(c)] Repeat step (a) but assume $n_1=30$ and $n_2=70$. What do the empirical sampling distributions suggest about normality? Is this as clear as part (a)?  
 
-Unequal samples increase skew; the log risk ratio is still more symmetric but less clearly normal.  
+\textit{\textcolor{blue}{Unequal samples increase skew; the log risk ratio is still more symmetric but less clearly normal.  }}
 
 \begin{center}
 \includegraphics[width=0.7\textwidth]{plots/Q2_c_Histogram.png}
@@ -324,7 +323,7 @@ Unequal samples increase skew; the log risk ratio is still more symmetric but le
 
 \item[(d)] Repeat step (c) but now with sample sizes $n_1=70$ and $n_2=30$.  
 
-Small denominator sample exaggerates skew in the risk ratio; the log risk ratio remains closer to normal, though slight skewness remains.  
+\textit{\textcolor{blue}{Small denominator sample exaggerates skew in the risk ratio; the log risk ratio remains closer to normal, though slight skewness remains.  }}
 
 \begin{center}
 \includegraphics[width=0.7\textwidth]{plots/Q2_d_Histogram.png}
@@ -336,39 +335,224 @@ Small denominator sample exaggerates skew in the risk ratio; the log risk ratio 
 For a point estimate of the mean of a population that is assumed to have a normal distribution, a data scientist decides to use the average of the sample lower and upper quartiles for the $n=100$ observations, since unlike the sample mean $\bar{Y}$, the quartiles are not affected by outliers.
 
 \begin{enumerate}
+
 \item[(a)] Evaluate the precision of this estimator compared to $\bar{Y}$ by randomly generating 100,000 samples of size 100 each from a $N(0,1)$ distribution and comparing the standard deviation of the 100,000 estimates with the theoretical standard error of $\bar{Y}$.
 
-\item[(b)] Assume now that the sample size is 500. Repeat step (a) using this updated sample size.
+\begin{lstlisting}
+def simulate_precision(n: int) -> None:
+    samples = rng.normal(loc=0, scale=1, size=(100_000, n))
+    quartile_estimates = [quartile_mean_estimator(sample) for sample in samples]
+    mean_estimates = samples.mean(axis=1)
+    std_quartile = np.std(quartile_estimates, ddof=1)
+    std_mean = np.std(mean_estimates, ddof=1)
+    se_mean = 1 / np.sqrt(n)
+
+    print(f"Sample size: {n}")
+    print(f"Quartile-based estimator std dev: {std_quartile}")
+    print(f"Sample mean std dev: {std_mean}")
+    print(f"Theoretical standard error of mean: {se_mean}")
+    print("\n")
+\end{lstlisting}
+
+\textit{\textcolor{blue}{Simulation results:}}
+
+\begin{verbatim}
+Sample size n = 100
+Quartile-based estimator std dev: 0.11021916844201737
+Sample mean std dev: 0.0997464865829455
+Theoretical standard error of mean: 0.1
+\end{verbatim}
+
+\textit{\textcolor{blue}{The quartile-based estimator has a standard deviation of $0.1102$, which is larger than the theoretical standard error of $\bar{Y}$ ($0.1$). Thus, for a normal population the quartile estimator is less precise than the sample mean.}}
+
+\item[(b)] Evaluate the precision of this estimator compared to $\bar{Y}$ by randomly generating 100,000 samples of size 500 each from a $N(0,1)$ distribution and comparing the standard deviation of the 100,000 estimates with the theoretical standard error of $\bar{Y}$.
+
+Simulation results:
+
+\begin{verbatim}
+Sample size n = 500
+Quartile-based estimator std dev: 0.04953018659979792
+Sample mean std dev: 0.044660325627139806
+Theoretical standard error of mean: 0.044721359549995794
+\end{verbatim}
+
+\textit{\textcolor{blue}{Again, the quartile-based estimator has a larger standard deviation (0.0495) than the sample mean, 0.0447. The difference is smaller with larger $n$, but the sample mean remains the more precise estimator for a normal distribution.}}
+
 \end{enumerate}
+\section*{Problem 4a [15 points]}
 
-\section*{Problem 4 [40 points]}
 
-\begin{enumerate}
-\item[(a) 15 points] In the 2018 General Social Survey, when asked whether they believed in life after death, 1017 of 1178 females said yes, and 703 of 945 males said yes.
+\textit{\textcolor{blue}{We construct 95\% confidence intervals for the population proportions using the Wald (normal approximation) method implemented in \texttt{statsmodels}:}}
 
-Construct 95\% confidence intervals for the population proportions of females and males that believe in life after death and for the difference between them. Interpret these intervals. Do the individual intervals overlap? Does the difference in proportions interval include zero?
+\begin{lstlisting}
+male_lower, male_upper = proportion_confint(
+    count=703,
+    nobs=945,
+    alpha=0.05,
+    method="normal",
+)
 
-\item[(b) 25 points] Using any dataset from the repository:
+female_lower, female_upper = proportion_confint(
+    count=1017,
+    nobs=1178,
+    alpha=0.05,
+    method="normal",
+)
+\end{lstlisting}
+
+\textit{\textcolor{blue}{This yields the following intervals:}}
+
+\[
+\text{Male CI: } (0.7161, 0.7717)
+\]
+
+\[
+\text{Female CI: } (0.8437, 0.8829)
+\]
+
+\textit{\textcolor{blue}{The 95\% confidence interval for males indicates that we are 95\% confident that between $71.6\%$ and $77.2\%$ of males in the population believe in life after death. The 95\% confidence interval for females indicates that we are 95\% confident that between $84.4\%$ and $88.3\%$ of females believe in life after death.}}
+
+\textit{\textcolor{blue}{Figure~\ref{fig:normal_ci} shows the confidence intervals for both groups.}}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/Normal_Confidence_Intervals.png}
+\caption{95\% Wald confidence intervals for the proportions of males and females who believe in life after death.}
+\label{fig:normal_ci}
+\end{figure}
+
+\textit{The intervals do not overlap, suggesting that the population proportion of females who believe in life after death is higher than the proportion of males.}
+\section*{Problem 4b [25 points]}
+Using any dataset from the repository:
 
 \texttt{https://stat4ds.rwth-aachen.de/data/}
 
 complete the following ``mini report'' that will include:
 
+
 \begin{enumerate}
+
 \item[(i)] Description of the problem you are trying to solve -- estimation goals for the project and background on why this is important. Assume 90\% confidence levels for all estimates.
+
+\textit{\textcolor{blue}{The goal of this project is to determine which demographic categories are associated with higher happiness levels. In particular, we examine whether happiness varies across marital status and sex categories. For example, \texttt{mean\_happiness = df['happiness'].mean()} gives a quick summary of the outcome.}}
+
+\textit{\textcolor{blue}{Understanding which groups report higher happiness can provide insight into how social factors influence well-being. You might start with \texttt{df.groupby('marital')['happiness'].mean()} to explore trends.}}
+
+\textit{\textcolor{blue}{Unless otherwise specified, all interval estimates use 90\% confidence levels, e.g., \texttt{ci\_lower, ci\_upper = mean\_confidence\_interval(df['happiness'], confidence=0.90)}.}}
+
 \item[(ii)] Description of the data you will use to solve the problem and discussion of key variables.
+
+\textit{\textcolor{blue}{The dataset contains the following variables:}}
+
+\begin{itemize}
+\item \textit{\textcolor{blue}{\texttt{id}: unique respondent identifier, e.g., \texttt{ids = df['id'].unique()}}}
+\item \textit{\textcolor{blue}{\texttt{happiness}: categorical happiness score (1-3), e.g., \texttt{df['happiness'].value\_counts()}}}
+\item \textit{\textcolor{blue}{\texttt{marital}: marital status category (1-3), e.g., \texttt{df.groupby('marital')['happiness'].mean()}}}
+\item \textit{\textcolor{blue}{\texttt{sex}: respondent sex ("male" or "female"), e.g., \texttt{df['sex'].unique()}}}
+\end{itemize}
+
+\textit{\textcolor{blue}{Happiness and marital status are ordinal categorical variables where larger values represent greater happiness. \texttt{df.describe()} helps summarize this.}}
+
+\textit{\textcolor{blue}{Sample size: \texttt{len(df)} = 2142}}
+
 \item[(iii)] Depiction of the sample data distribution for each variable you are considering. If the outcome is categorical, give a bar chart of the sample distribution.
+
+\textit{\textcolor{blue}{Bar charts show the distribution of each categorical variable. You can generate them with \texttt{df['happiness'].value\_counts().plot(kind='barh')} or the \texttt{barchart()} helper function.}}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{plots/happiness_distribution.png}
+    \caption{Distribution of happiness scores, e.g., \texttt{barchart(x=counts.index, y=counts.values, y\_label='Happiness')}}.
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{plots/marital_distribution.png}
+    \caption{Distribution of marital status, e.g., \texttt{barchart(x=df['marital'].unique(), y=df['marital'].value\_counts())}}.
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{plots/sex_distribution.png}
+    \caption{Distribution of sex, e.g., \texttt{df['sex'].value\_counts().plot(kind='barh')}}.
+\end{figure}
+
 \item[(iv)] Estimation involving at least one mean and one proportion (with point and interval estimates) and their interpretation.
+
+\textit{\textcolor{blue}{The estimated mean happiness score is 1.837 (\texttt{mean\_happiness = df['happiness'].mean()}).}}
+
+\textit{\textcolor{blue}{The 90\% confidence interval for the population mean happiness is (1.814, 1.860) (\texttt{ci\_lower, ci\_upper = mean\_confidence\_interval(df['happiness'])}).}}
+
+\textit{\textcolor{blue}{We are 90\% confident that the true population average happiness lies within this interval.}}
+
+\textit{\textcolor{blue}{The estimated proportion of individuals reporting the highest happiness (level 3) is 0.140 (\texttt{p\_hat = (df['happiness'] == 3).mean()}).}}
+
+\textit{\textcolor{blue}{The 90\% confidence interval for this proportion is (0.127, 0.152) (\texttt{proportion\_confidence\_interval(count=happy\_count, n=len(df))}).}}
+
 \item[(v)] Estimation involving two groups compared on their averages or proportions.
+
+\textit{\textcolor{blue}{Mean and median happiness by sex: \texttt{group\_stats = df.groupby('sex')['happiness'].agg(['mean','median','count'])}.}}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lccc}
+\toprule
+sex & mean & median & count \\
+\midrule
+female & 1.825784 & 2.0 & 1148 \\
+male   & 1.850101 & 2.0 & 994 \\
+\bottomrule
+\end{tabular}
+\caption{Happiness by sex.}
+\end{table}
+
+\textit{\textcolor{blue}{The difference between the highest and lowest mean happiness across sex categories is 0.024 (\texttt{mean\_diff = group\_stats['mean'].max() - group\_stats['mean'].min()}).}}
+
+\textit{\textcolor{blue}{To examine whether these differences are meaningful, we plot the mean happiness scores by marital status and sex along with 90\% confidence intervals, e.g., \texttt{plot\_happiness\_by\_marital\_sex(df)}.}}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{plots/mean_happiness_by_marriage_status_and_sex.png}
+    \caption{Mean happiness by marital status and sex with 90\% confidence intervals.}
+\end{figure}
+
 \item[(vi)] A 95\% confidence interval for the correlation between two continuous variables along with a corresponding scatterplot. Use bootstrapping with 1000 bootstrap samples.
+
+\textit{\textcolor{blue}{We estimate the correlation between marital status and happiness. \texttt{corr = np.corrcoef(df['happiness'], df['marital'])[0,1]}.}}
+
+\textit{\textcolor{blue}{A 95\% bootstrap confidence interval is constructed using 1000 bootstrap samples, e.g., \texttt{corr\_boot = bootstrap\_correlation(df['happiness'].to\_numpy(), df['marital'].to\_numpy())}.}}
+
+\textit{\textcolor{blue}{The estimated correlation is 0.274.}}
+
+\textit{\textcolor{blue}{The 95\% bootstrap confidence interval is (0.236, 0.315).}}
+
 \item[(vii)] For one continuous outcome, compute a 95\% confidence interval of the Karl Pearson Skewness coefficient:
+
 \[
 3(\text{mean}-\text{median})/\text{standard deviation}
 \]
+
 based on 1000 bootstrap samples. Provide the interval and a visualization of the bootstrap distribution.
+
+\textit{\textcolor{blue}{The estimated skewness is -0.758 (\texttt{pearson\_skew(df['happiness'])}).}}
+
+\textit{\textcolor{blue}{The 95\% bootstrap confidence interval is (-0.883, -0.615) (\texttt{skew\_boot = [pearson\_skew(rng.choice(df['happiness'], size=len(df), replace=True)) for \_ in range(1000)]}).}}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{plots/skewness_bootstrap.png}
+    \caption{Bootstrap distribution of Pearson skewness estimates.}
+\end{figure}
+
 \item[(viii)] A closing section highlighting what you learned from the data relative to your goals.
-\end{enumerate}
+
+\textit{\textcolor{blue}{Provided that my assumptions about the data are correct, I did achieve my goals in analyzing the data. Small code snippets like \texttt{df.groupby(['marital','sex'])['happiness'].mean()} help reveal which groups report higher happiness.}}
+
+\textit{\textcolor{blue}{It is obvious that the marital status of "1" is detrimental to the happiness score, while the other feature, "sex", does not seem to make a substantial difference.}}
 
 \end{enumerate}
+
+
+
 
 \end{document}
