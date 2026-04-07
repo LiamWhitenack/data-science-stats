@@ -23,6 +23,7 @@
 }
 
 \title{DASC 605 -- Homework 1}
+\author{Liam Whitenack}
 \date{}
 
 \begin{document}
@@ -108,6 +109,52 @@ $\{H_2,H_3,H_4,H_C,H_F\}$ & $1/32$ & $(50,20,8,22,50)$ & $30\;2/3$ & $18\;2/3$ &
 \bottomrule
 \end{tabular}
 \end{center}
+
+\begin{lstlisting}
+first_block_houses = ["H1", "H2", "H3", "H4"]
+first_block_samples = list(combinations(first_block_houses, 3))
+first_block_probability = 1 / 4
+
+
+def trimmed_mean_20(values):
+
+    sorted_values = sorted(values)
+
+    # remove smallest and largest
+    trimmed = sorted_values[1:-1]
+
+    return sum(trimmed) / len(trimmed)
+
+
+rows = []
+
+for first_sample in first_block_samples:
+
+    for second_sample, second_probability in second_block_probabilities.items():
+
+        sample = list(first_sample) + list(second_sample)
+
+        probability = first_block_probability * second_probability
+
+        distances = [travel_distance[h] for h in sample]
+        mpgs = [mpg_for_car_used[h] for h in sample]
+
+        tsm_distance = trimmed_mean_20(distances)
+        tsm_mpg = trimmed_mean_20(mpgs)
+
+        confidence_interval = (tsm_distance - 6, tsm_distance + 6)
+
+        rows.append(
+            {
+                "Sample": sample,
+                "P(S)": probability,
+                "Values": distances,
+                "tsm(.20) Distance": tsm_distance,
+                "tsm(.20) MPG": tsm_mpg,
+                "Conf Interval": confidence_interval,
+            }
+        )
+\end{lstlisting}
 
 \begin{enumerate}
 \item[(a)] Is tsm(.20) unbiased for the population average commute distance? If not, what is the bias?
